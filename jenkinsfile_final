@@ -10,7 +10,7 @@ pipeline {
       stage('checkout') {
             steps {
                 echo 'Cloning GIT HUB Repo '
-				git branch: 'main', url: 'git 'https://github.com/Chinthammanoj/SamplePipeline.git''
+				git branch: 'master', url: 'git 'https://github.com/Chinthammanoj/SamplePipeline.git''
             }  
         }
 		
