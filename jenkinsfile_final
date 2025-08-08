@@ -19,10 +19,8 @@ pipeline {
 	 stage('sonar') {
             steps {
                 echo 'scanning project'
-                bat 'dir'
-                bat ''' mvn sonar:sonar \\
-                      -Dsonar.host.url=http://localhost:9000\\
-                      -Dsonar.login=squ_d359581011f5dfdc5b4b77d8e6b5fef68bf326ae'''
+               withCredentials([string(credentialsId: 'sonartoken', variable: 'SONAR_TOKEN')]) {
+                    bat "mvn clean verify sonar:sonar -Dsonar.projectKey=SamplePipeline -Dsonar.host.url=%SONAR_URL% -Dsonar.login=%SONAR_TOKEN%"'''
             }
     	}
 		
@@ -95,6 +93,7 @@ pipeline {
     }
 
 }
+
 
 
 
