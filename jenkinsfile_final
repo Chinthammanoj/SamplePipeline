@@ -19,8 +19,7 @@ pipeline {
 	 stage('sonar') {
             steps {
                 echo 'scanning project'
-                bat 'ls -ltr'
-                
+                bat 'dir'
                 bat ''' mvn sonar:sonar \\
                       -Dsonar.host.url=http://localhost:9000\\
                       '''
@@ -96,5 +95,6 @@ pipeline {
     }
 
 }
+
 
 
