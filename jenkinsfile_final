@@ -21,11 +21,6 @@ pipeline {
         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) 
             echo 'scanning project'
             bat "mvn sonar:sonar -Dsonar.login=%SONAR_TOKEN%"
-
-                
-                bat ''' mvn sonar:sonar \\
-                      -Dsonar.host.url=http://localhost:9000/
-                      -Dsonar.login=squ_d359581011f5dfdc5b4b77d8e6b5fef68bf326ae'''
             }
     	}
 		
@@ -98,6 +93,7 @@ pipeline {
     }
 
 }
+
 
 
 
