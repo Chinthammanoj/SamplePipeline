@@ -36,12 +36,13 @@ pipeline {
 		
 		
 		
-        stage('Docker Image') {
+        stages {
+        stage('Build Docker Image') {
             steps {
-                echo 'Docker Image building'
-				bat 'docker build -t manojkumar1212/batch13:${BUILD_NUMBER} .'
+                bat "docker build -t manojkumar1212/batch13:%BUILD_NUMBER% ."
             }
         }
+    }
 		
 		
        stage('Push to Dockerhub') {
@@ -94,6 +95,7 @@ pipeline {
     }
 
 }
+
 
 
 
