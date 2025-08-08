@@ -41,19 +41,15 @@ pipeline {
         }
 		
 		
-       stage('Push to Dockerhub') {
+       stage('Docker Login and Push') {
             steps {
-			 script {
-			withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) 
-			{
-            bat 'docker login -u manojkumar1212 -p ${dockerhub}'
-			
-			 }
-			   bat 'docker push manojkumar1212/batch13:${BUILD_NUMBER}'
-			   
-           
-				}
-				
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    bat """
+                        docker login -u %DOCKER_USER% -p %DOCKER_PASS%
+                        docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .
+                        docker push %IMAGE_NAME%:%BUILD_NUMBER%
+                    """
+                }
             }
         }
 		
@@ -91,6 +87,7 @@ pipeline {
     }
 
 }
+
 
 
 
