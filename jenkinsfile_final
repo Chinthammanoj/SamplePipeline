@@ -19,11 +19,11 @@ pipeline {
 	 stage('sonar') {
             steps {
                 echo 'scanning project'
-                sh 'ls -ltr'
+                bat 'ls -ltr'
                 
-                sh ''' mvn sonar:sonar \\
-                      -Dsonar.host.url=http://47.129.213.124:9000 \\
-                      -Dsonar.login=squ_10a6ab876fcba1af6edd028cebb5750ee6472459'''
+                bat ''' mvn sonar:sonar \\
+                      -Dsonar.host.url=http://localhost:9000\\
+                      '''
             }
     	}
 		
@@ -32,7 +32,7 @@ pipeline {
         stage('Build Artifact') {
             steps {
                 echo 'Build Artifact'
-				sh 'mvn clean package'
+				bat 'mvn clean package'
             }
         }
 		
@@ -41,7 +41,7 @@ pipeline {
         stage('Docker Image') {
             steps {
                 echo 'Docker Image building'
-				sh 'docker build -t manojkumar1212/batch13:${BUILD_NUMBER} .'
+				bat 'docker build -t manojkumar1212/batch13:${BUILD_NUMBER} .'
             }
         }
 		
@@ -51,10 +51,10 @@ pipeline {
 			 script {
 			withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) 
 			{
-            sh 'docker login -u manojkumar1212 -p ${dockerhub}'
+            bat 'docker login -u manojkumar1212 -p ${dockerhub}'
 			
 			 }
-			   sh 'docker push manojkumar1212/batch13:${BUILD_NUMBER}'
+			   bat 'docker push manojkumar1212/batch13:${BUILD_NUMBER}'
 			   
            
 				}
@@ -74,11 +74,11 @@ pipeline {
                 echo 'Update Deployment File'
 				withCredentials([string(credentialsId: 'githubtoken', variable: 'githubtoken')]) 
 				{
-                  sh '''
+                  bat '''
                     git config user.email "chinthammanojkumar@gmail.com"
                     git config user.name "Manoj"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/batch13:.*/batch13:${BUILD_NUMBER}/g" deploymentfiles/deployment.yml
+                    sed -i "s/batch13:.*/batch13:${BUILD_NUMBER}/g" deployment.yml
                     git add .
                     
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
@@ -96,4 +96,5 @@ pipeline {
     }
 
 }
+
 
