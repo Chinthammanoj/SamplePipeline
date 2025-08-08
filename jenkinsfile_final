@@ -19,8 +19,11 @@ pipeline {
 	 stage('sonar') {
             steps {
                 echo 'scanning project'
-               withCredentials([string(credentialsId: 'sonartoken', variable: 'SONAR_TOKEN')]) {
-                    bat "mvn clean verify sonar:sonar -Dsonar.projectKey=SamplePipeline -Dsonar.host.url=%SONAR_URL% -Dsonar.login=%SONAR_TOKEN%"'''
+               bat 'ls -ltr'
+                
+                bat ''' mvn sonar:sonar \\
+                      -Dsonar.host.url=http://localhost:9000/
+                      -Dsonar.login=squ_d359581011f5dfdc5b4b77d8e6b5fef68bf326ae'''
             }
     	}
 		
@@ -38,7 +41,7 @@ pipeline {
         stage('Docker Image') {
             steps {
                 echo 'Docker Image building'
-				bat 'docker build -t manojkumar1212/mydocker:${BUILD_NUMBER} .'
+				bat 'docker build -t manojkumar1212/batch13:${BUILD_NUMBER} .'
             }
         }
 		
@@ -51,7 +54,7 @@ pipeline {
             bat 'docker login -u manojkumar1212 -p ${dockerhub}'
 			
 			 }
-			   bat 'docker push manojkumar1212/mydocker:${BUILD_NUMBER}'
+			   bat 'docker push manojkumar1212/batch13:${BUILD_NUMBER}'
 			   
            
 				}
@@ -75,7 +78,7 @@ pipeline {
                     git config user.email "chinthammanojkumar@gmail.com"
                     git config user.name "Manoj"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/mydocker:.*/mydocker:${BUILD_NUMBER}/g" deployment.yml
+                    sed -i "s/batch13:.*/batch13:${BUILD_NUMBER}/g" deployment.yml
                     git add .
                     
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
@@ -93,6 +96,7 @@ pipeline {
     }
 
 }
+
 
 
 
