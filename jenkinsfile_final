@@ -43,12 +43,9 @@ pipeline {
 		
        stage('Docker Login and Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    bat """
-                        docker login -u %DOCKER_USER% -p %DOCKER_PASS%
-                        docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .
-                        docker push %IMAGE_NAME%:%BUILD_NUMBER%
-                    """
+                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
+                    bat "docker push %IMAGE_NAME%"
                 }
             }
         }
@@ -87,6 +84,7 @@ pipeline {
     }
 
 }
+
 
 
 
