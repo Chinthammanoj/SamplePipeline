@@ -19,7 +19,8 @@ pipeline {
 	 stage('sonar') {
     steps {
         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-    bat "mvn sonar:sonar -Dsonar.login=%SONAR_TOKEN%"
+            echo 'scanning project'
+            bat "mvn sonar:sonar -Dsonar.login=%SONAR_TOKEN%"
 }
             }
     	}
@@ -93,6 +94,7 @@ pipeline {
     }
 
 }
+
 
 
 
