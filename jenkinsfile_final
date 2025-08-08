@@ -22,7 +22,7 @@ pipeline {
                 bat 'dir'
                 bat ''' mvn sonar:sonar \\
                       -Dsonar.host.url=http://localhost:9000\\
-                      '''
+                      -Dsonar.login=squ_d359581011f5dfdc5b4b77d8e6b5fef68bf326ae'''
             }
     	}
 		
@@ -40,7 +40,7 @@ pipeline {
         stage('Docker Image') {
             steps {
                 echo 'Docker Image building'
-				bat 'docker build -t manojkumar1212/batch13:${BUILD_NUMBER} .'
+				bat 'docker build -t manojkumar1212/mydocker:${BUILD_NUMBER} .'
             }
         }
 		
@@ -53,7 +53,7 @@ pipeline {
             bat 'docker login -u manojkumar1212 -p ${dockerhub}'
 			
 			 }
-			   bat 'docker push manojkumar1212/batch13:${BUILD_NUMBER}'
+			   bat 'docker push manojkumar1212/mydocker:${BUILD_NUMBER}'
 			   
            
 				}
@@ -95,6 +95,7 @@ pipeline {
     }
 
 }
+
 
 
 
